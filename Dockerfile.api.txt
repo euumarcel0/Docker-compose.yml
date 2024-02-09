@@ -1,0 +1,19 @@
+Dockerfile.api
+
+# Use uma imagem base adequada para o seu projeto (por exemplo, ASP.NET Core)
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /app
+
+# Copie o arquivo do projeto e restaure as dependências
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copie o restante do código do projeto e compile
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# Etapa de execução
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "webapi.event+.dll"]

@@ -1,0 +1,29 @@
+docker-compose.yml
+
+version: '3'
+services:
+  frontend:
+    build: .
+    ports:
+      - "80:3000"
+  backend:
+    build:
+      context: ./webapi.event+  # Corrigir o caminho para o Dockerfile da sua API
+      dockerfile: Dockerfile.api
+    ports:
+      - "30001:3001"
+    environment:
+      - ENV_VAR_1=valor_1  # Defina as variáveis de ambiente necessárias
+      - ENV_VAR_2=valor_2
+    depends_on:
+      - database
+  database:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: Senai@134
+      ACCEPT_EULA: Y
+      MSSQL_DATABASE: eventplusjuliadatabase
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: Senai@134
+    ports:
+      - "1433:1433"

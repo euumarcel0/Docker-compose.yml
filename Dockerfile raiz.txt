@@ -1,0 +1,26 @@
+Dockerfile raiz
+
+# Use uma imagem base com Node.js instalado
+FROM node:latest
+
+# Defina o diretório de trabalho dentro do contêiner
+WORKDIR /app
+
+# Copie os arquivos package.json e package-lock.json para o diretório de trabalho
+COPY package*.json ./
+
+# Instale as dependências do projeto
+RUN npm install
+
+# Copie o restante dos arquivos para o diretório de trabalho
+COPY . .
+
+# Compile o projeto React
+RUN npm run build
+
+# Exponha a porta 3000 (ou a porta que seu aplicativo React usa)
+EXPOSE 80
+
+# Comando para iniciar o servidor quando o contêiner for iniciado
+CMD ["npm", "start"]
+
